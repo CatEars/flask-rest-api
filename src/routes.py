@@ -5,7 +5,7 @@ from flask import Flask, request, abort
 from flask_restful import Resource, Api
 from loguru import logger
 
-todos = {}
+from .db import add_todo, get_todo, delete_todo, list_todos
 
 todo_schema = {
     'type': 'object',
@@ -22,44 +22,22 @@ def _default_to(json: dict, key: str, value):
     if not key in json:
         json[key] = value
 
-def add_todo(json_body) -> str:
+def validate_todo(json_body):
     _default_to(json_body, 'id', str(uuid.uuid4()))
     _default_to(json_body, 'completed', False)
     jsonschema.validate(instance=json_body, schema=todo_schema)
-
-    todos[json_body['id']] = json_body
-    return json_body['id']
-
-
-def get_todo(todo_id: str):
-    return todos.get(todo_id)
-
-
-def delete_todo(todo_id: str):
-    if not todo_id in todos:
-        return None
-    del todos[todo_id]
-    return todo_id
-
-
-class HelloWorld(Resource):
-
-    def __init__(self, **kwargs):
-        self.message = kwargs.get('message', 'Hello, World!')
-
-    def get(self):
-        message = self.message.split(' ')
-        return message
 
 
 class TodoAll(Resource):
 
     def get(self):
-        keys = todos.keys()
+        keys = list_todos()
         return list(keys)
 
     def post(self):
-        return add_todo(request.get_json()), 201
+        body = request.get_json()
+        validate_todo(body)
+        return add_todo(body), 201
 
 
 class TodoSingle(Resource):
@@ -74,6 +52,7 @@ class TodoSingle(Resource):
     def post(self, todo_id: str):
         body = request.get_json()
         body['id'] = todo_id
+        validate_todo(body)
         todo_id = add_todo(body)
         return todo_id, 201
 
@@ -82,6 +61,16 @@ class TodoSingle(Resource):
         if res is None:
             return abort(404)
         return res, 202
+
+
+class HelloWorld(Resource):
+
+    def __init__(self, **kwargs):
+        self.message = kwargs.get('message', 'Hello, World!')
+
+    def get(self):
+        message = self.message.split(' ')
+        return message
 
 
 def create_routes(app: Flask) -> Flask:
