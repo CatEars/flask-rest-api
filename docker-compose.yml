@@ -16,3 +16,22 @@ services:
 
     ports:
       - 5000:5000
+
+    networks:
+      - cache
+      - db
+
+  redis:
+    image: redis
+
+    networks:
+      - cache
+
+  mongodb:
+    networks:
+      - db
+
+networks:
+  cache:
+  db:
+
