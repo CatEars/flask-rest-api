@@ -6,20 +6,22 @@ Repository template for using flask as a restful API.
 
 * Web development framework with [flask](https://flask.palletsprojects.com/en/1.1.x/)
 * Simple API building with [flask-restful](https://flask-restful.readthedocs.io/en/latest/)
+* Input validation with [jsonschema](https://python-jsonschema.readthedocs.io/en/stable/)
 * Dependency management with [poetry](https://python-poetry.org/)
 * Testing with [pytest](https://docs.pytest.org/en/stable/)
 * Job scheduling with [RQ](https://python-rq.org/)
 * Configuration management with [dynaconf](https://github.com/rochacbruno/dynaconf)
 * Logging with [loguru](https://github.com/Delgan/loguru)
-* Development task automation with [doit](https://pydoit.org/)
 * Database with [MongoDB](https://www.mongodb.com/) and [pymongo](https://pymongo.readthedocs.io/en/stable/)
 * Caching with [Redis](https://redis.io/) and [python-redis](https://pypi.org/project/redis/)
+* https://python-jsonschema.readthedocs.io/en/stable/
 
 ### And Also:
 
 * Easy development with [docker-compose](https://docs.docker.com/compose/)
 * Build pipeline already established for exporting a docker image.
 * [Github Actions](https://github.com/features/actions) set up to run Continuous Integration
+* Development task automation with [doit](https://pydoit.org/)
 * 100% Test coverage, including unit and end to end testing
 * Sample Todo app, showcasing how to use the template
 

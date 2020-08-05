@@ -22,6 +22,7 @@ def _default_to(json: dict, key: str, value):
     if not key in json:
         json[key] = value
 
+
 def validate_todo(json_body):
     _default_to(json_body, 'id', str(uuid.uuid4()))
     _default_to(json_body, 'completed', False)
@@ -43,7 +44,6 @@ class TodoAll(Resource):
 class TodoSingle(Resource):
 
     def get(self, todo_id: str):
-        logger.info(f'Returning TODO "{todo_id}"')
         x = get_todo(todo_id)
         if x is None:
             return abort(404)
