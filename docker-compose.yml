@@ -32,6 +32,30 @@ services:
     networks:
       - db
 
+  worker:
+    build:
+      context: .
+      dockerfile: docker-builds/rq-dev-dockerfile
+    volumes:
+      - ./src:/app/src:ro
+      - ./settings.toml:/app/settings.toml:ro
+    networks:
+      - cache
+      - db
+
+    command: poetry run rq worker --url=redis://redis:6379
+    depends_on:
+      - redis
+
+  redis-commander:
+    image: rediscommander/redis-commander
+    networks:
+      - cache
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - 8081:8081
+
 networks:
   cache:
   db:

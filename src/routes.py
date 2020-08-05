@@ -5,8 +5,9 @@ from flask import Flask, request, abort
 from flask_restful import Resource, Api
 from loguru import logger
 
-from .db import add_todo, get_todo, delete_todo, list_todos
+from .db import get_todo, list_todos
 from . import cache
+from .tasks import add_todo_to_db, delete_todo_from_cache, delete_todo_from_db, get_queue
 
 
 todo_schema = {
@@ -40,7 +41,8 @@ class TodoAll(Resource):
     def post(self):
         body = request.get_json()
         validate_todo(body)
-        return add_todo(body), 201
+        get_queue().enqueue(add_todo_to_db, body)
+        return body['id'], 202
 
 
 class TodoSingle(Resource):
@@ -55,15 +57,13 @@ class TodoSingle(Resource):
         body = request.get_json()
         body['id'] = todo_id
         validate_todo(body)
-        todo_id = add_todo(body)
-        return todo_id, 201
+        get_queue().enqueue(add_todo_to_db, body)
+        return todo_id, 202
 
     def delete(self, todo_id: str):
-        cache.delete_todo(todo_id)
-        res = delete_todo(todo_id)
-        if res is None:
-            return abort(404)
-        return res, 202
+        get_queue().enqueue(delete_todo_from_cache, todo_id)
+        get_queue().enqueue(delete_todo_from_db, todo_id)
+        return todo_id, 202
 
 
 class HelloWorld(Resource):

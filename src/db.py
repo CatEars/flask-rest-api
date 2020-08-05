@@ -12,15 +12,6 @@ def list_todos():
     ]
 
 
-def add_todo(todo):
-    logger.info(f'Adding todo {todo["id"]} to mongo')
-    todo['_id'] = todo['id']
-    del todo['id']
-
-    db.todos.insert_one(todo)
-    return todo['_id']
-
-
 def get_todo(todo_id: str):
     logger.info(f'Getting todo {todo_id} from mongo')
     res = db.todos.find_one({'_id': todo_id})
@@ -30,15 +21,6 @@ def get_todo(todo_id: str):
     res['id'] = res['_id']
     del res['_id']
     return res
-
-
-def delete_todo(todo_id: str):
-    logger.info(f'Deleting todo {todo_id} in mongo')
-    res = db.todos.delete_one({'_id': todo_id})
-    if res.deleted_count == 1:
-        return todo_id
-    else:
-        return None
 
 
 def initialize_db(app: Flask):
