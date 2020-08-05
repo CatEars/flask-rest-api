@@ -1,0 +1,10 @@
+FROM python:3.8
+
+WORKDIR /app
+
+COPY pyproject.toml poetry.lock ./
+
+RUN pip install poetry && poetry install
+
+CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0"]
+

@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: docker-builds/flask-dev-dockerfile
+    
+    volumes:
+      - ./src:/app/src:ro
+
+    environment:
+      - FLASK_APP=src
+      - FLASK_ENV=development
+
+    ports:
+      - 5000:5000
