@@ -6,6 +6,8 @@ from flask_restful import Resource, Api
 from loguru import logger
 
 from .db import add_todo, get_todo, delete_todo, list_todos
+from . import cache
+
 
 todo_schema = {
     'type': 'object',
@@ -44,7 +46,7 @@ class TodoAll(Resource):
 class TodoSingle(Resource):
 
     def get(self, todo_id: str):
-        x = get_todo(todo_id)
+        x = cache.get_todo(todo_id, get_todo)
         if x is None:
             return abort(404)
         return x, 200
@@ -57,6 +59,7 @@ class TodoSingle(Resource):
         return todo_id, 201
 
     def delete(self, todo_id: str):
+        cache.delete_todo(todo_id)
         res = delete_todo(todo_id)
         if res is None:
             return abort(404)

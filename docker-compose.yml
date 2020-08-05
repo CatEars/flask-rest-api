@@ -23,7 +23,7 @@ services:
       - db
 
   redis:
-    image: bitnami/redis:latest
+    image: redis
     networks:
       - cache
 
