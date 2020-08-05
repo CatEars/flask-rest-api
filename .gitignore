@@ -1,4 +1,8 @@
+.doit.db
 venv/
+
+settings.toml
+.secrets.*
 
 *.pyc
 __pycache__/
@@ -12,3 +16,6 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+# Ignore dynaconf secret files
+.secrets.*

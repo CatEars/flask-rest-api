@@ -1,4 +1,4 @@
-# Flask REST API template
+# Flask REST API Template
 
 Repository template for using flask as a restful API.
 
@@ -10,8 +10,10 @@ Repository template for using flask as a restful API.
 * Testing with [pytest](https://docs.pytest.org/en/stable/)
 * Job scheduling with [RQ](https://python-rq.org/)
 * Configuration management with [dynaconf](https://github.com/rochacbruno/dynaconf)
-* Optional MongoDB with [pymongo](https://pymongo.readthedocs.io/en/stable/)
-* Optional Caching with [python-redis](https://pypi.org/project/redis/)
+* Logging with [loguru](https://github.com/Delgan/loguru)
+* Development task automation with [doit](https://pydoit.org/)
+* Database with [MongoDB](https://www.mongodb.com/) and [pymongo](https://pymongo.readthedocs.io/en/stable/)
+* Caching with [Redis](https://redis.io/) and [python-redis](https://pypi.org/project/redis/)
 
 ### And Also:
 
@@ -21,13 +23,35 @@ Repository template for using flask as a restful API.
 * 100% Test coverage, including unit and end to end testing
 * Sample Todo app, showcasing how to use the template
 
-
 # Getting Started
 
-Make sure you have docker and docker-compose installed
+Make sure you have, `poetry`, `docker` and `docker-compose` installed and run
+the following:
 
 ```
+$ poetry install
+...
+$ poetry run doit bootstrap --name my-application-name
+...
 $ docker-compose up
 ```
 
-Open [localhost:5000/hello](http://localhost:5000/hello).
+Open [localhost:5000/hello](http://localhost:5000/hello), you should be seeing
+`["Hello", "Flask", "Template!"]`.
+
+
+# How To
+
+## Run automated unit test suite
+
+```
+$ poetry run doit test
+```
+
+## Run automated end to end tests
+
+```
+$ docker-compose up
+... in another terminal ...
+$ poetry run doit e2e
+```

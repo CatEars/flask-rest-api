@@ -9,6 +9,7 @@ services:
     
     volumes:
       - ./src:/app/src:ro
+      - ./settings.toml:/app/settings.toml:ro
 
     environment:
       - FLASK_APP=src
@@ -22,12 +23,12 @@ services:
       - db
 
   redis:
-    image: redis
-
+    image: bitnami/redis:latest
     networks:
       - cache
 
   mongodb:
+    image: bitnami/mongodb:latest
     networks:
       - db
 
