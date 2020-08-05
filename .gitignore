@@ -19,3 +19,4 @@ build/
 
 # Ignore dynaconf secret files
 .secrets.*
+!artifacts/*

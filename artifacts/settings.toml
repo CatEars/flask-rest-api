@@ -1,0 +1,7 @@
+[default]
+message="Hello Flask Template!"
+mongo_host="mongodb"
+mongo_port=27017
+mongo_db_name="todo_db"
+redis_host="redis"
+redis_port=6379
