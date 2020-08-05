@@ -13,6 +13,7 @@ class HelloWorld(Resource):
 
 
 def create_routes(app: Flask) -> Flask:
+    app.logger.info('Registering routes')
 
     api = Api(app)
     api.add_resource(
@@ -22,5 +23,6 @@ def create_routes(app: Flask) -> Flask:
             'message': app.config.message
         }
     )
+    app.logger.info('Registered "/hello"')
 
     return app

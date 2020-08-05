@@ -4,7 +4,7 @@ from flask import Flask
 from dynaconf import FlaskDynaconf
 
 from .routes import create_routes
-
+from .log import configure_logging
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -15,6 +15,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    configure_logging(app)
     create_routes(app)
 
     return app
