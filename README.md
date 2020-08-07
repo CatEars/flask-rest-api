@@ -14,7 +14,6 @@ Repository template for using flask as a restful API.
 * Logging with [loguru](https://github.com/Delgan/loguru)
 * Database with [MongoDB](https://www.mongodb.com/) and [pymongo](https://pymongo.readthedocs.io/en/stable/)
 * Caching with [Redis](https://redis.io/) and [python-redis](https://pypi.org/project/redis/)
-* https://python-jsonschema.readthedocs.io/en/stable/
 
 ### And Also:
 
