@@ -1,5 +1,6 @@
 .doit.db
 venv/
+.venv
 
 settings.toml
 .secrets.*
