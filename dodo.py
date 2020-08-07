@@ -1,3 +1,15 @@
+STDOUT = 2
+
+
+def task_test():
+    return {
+        'actions': [
+            ['python', '-m', 'pytest']
+        ],
+        'verbosity': STDOUT
+    }
+
+
 def task_bootstrap():
 
     def rename(name: str):
@@ -16,5 +28,5 @@ def task_bootstrap():
                 'default': ''
             }
         ],
-        'verbosity': 2
+        'verbosity': STDOUT
     }
