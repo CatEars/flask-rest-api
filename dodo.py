@@ -24,6 +24,15 @@ def task_test():
     }
 
 
+def task_coverage():
+    return {
+        'actions': [
+            ['python', '-m', 'pytest', '--cov=src',
+             '--cov-report=html', '--cov-branch']
+        ],
+        'verbosity': STDOUT
+    }
+
 def task_bootstrap():
 
     def rename(name: str):

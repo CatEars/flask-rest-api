@@ -7,7 +7,16 @@ client = None
 expire_time = None
 
 
+def get_client():
+    return client
+
+
+def get_expire_time():
+    return expire_time
+
+
 def get_todo(todo_id: str, retrieval_func):
+    client = get_client()
     logger.info(f'Getting todo {todo_id} from cache')
     key = f'todo-{todo_id}'
     if client.exists(key):
@@ -19,12 +28,13 @@ def get_todo(todo_id: str, retrieval_func):
     if result:
         with client.pipeline() as pipe:
             pipe.set(key, json.dumps(result))
-            pipe.expire(key, expire_time)
+            pipe.expire(key, get_expire_time())
             pipe.execute()
     return result
 
 
 def delete_todo(todo_id: str):
+    client = get_client()
     logger.info(f'Deleting todo {todo_id} from cache')
     key = f'todo-{todo_id}'
     res = client.delete(key)
