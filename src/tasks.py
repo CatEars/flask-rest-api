@@ -1,5 +1,5 @@
 from dynaconf import Dynaconf
-from pymongo import MongoClient
+import pymongo
 import redis
 from rq import Queue
 from flask import Flask
@@ -19,7 +19,7 @@ def get_config():
 
 def get_mongo_db():
     config = get_config()
-    return MongoClient(
+    return pymongo.MongoClient(
         host=config.MONGO_HOST,
         port=config.MONGO_PORT
     )[config.MONGO_DB_NAME]

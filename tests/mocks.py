@@ -1,11 +1,23 @@
 from dynaconf import Dynaconf
 
-class FakeRedisClient:
+
+redis_client = None
+def FakeRedisClient(*args, **kwargs):
+    global redis_client
+    if not redis_client:
+        redis_client = _FakeRedisClient(*args, **kwargs)
+    return redis_client
+
+
+class _FakeRedisClient:
 
     def __init__(self, *args, **kwargs):
         self.values = {}
         self._args = args
         self._kwargs = kwargs
+
+    def _clear(self):
+        self.values = {}
 
     def _add(self, key, value):
         self.values[key] = value
@@ -87,6 +99,21 @@ class FakeMongoTable:
     def find_one(self, query):
         return FakeMongoQuery(self.elements).find_one(query)
 
+    def insert_one(self, item):
+        self._add(item)
+
+    def _find_index_of(self, query):
+        for idx, elem in enumerate(self.elements):
+            keys = query.keys()
+            matches = all(key in elem and elem[key] == query[key] for key in keys)
+            if matches:
+                return idx
+
+    def delete_one(self, query):
+        matching_index = self._find_index_of(query)
+        if isinstance(matching_index, int):
+            del self.elements[matching_index]
+
     def _add(self, element):
         self.elements.append(element)
 
@@ -100,10 +127,19 @@ class FakeMongoDb:
         setattr(self, name, FakeMongoTable())
 
 
-class FakeMongoClient:
+mongo_client = None
+def FakeMongoClient(*args, **kwargs):
+    global mongo_client
+    if mongo_client is None:
+        mongo_client = _FakeMongoClient(*args, **kwargs)
+    return mongo_client
+
+class _FakeMongoClient:
 
     def __init__(self, *args, **kwargs):
-        pass
+        self.db_mapping = {}
 
     def __getitem__(self, key):
-        return FakeMongoDb()
+        if not key in self.db_mapping:
+            self.db_mapping[key] = FakeMongoDb()
+        return self.db_mapping[key]

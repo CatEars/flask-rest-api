@@ -10,6 +10,7 @@ from .mocks import FakeRedisClient, FakeFlaskApp
 def fake_redis(monkeypatch):
     client = FakeRedisClient()
     monkeypatch.setattr(cache, 'get_client', lambda: client)
+    client._clear()
     return client
 
 
@@ -50,4 +51,4 @@ def test_initiaize(monkeypatch):
 
     cache.initialize_cache(FakeFlaskApp())
     assert isinstance(cache.get_expire_time(), int)
-    assert isinstance(cache.get_client(), FakeRedisClient)
+    assert cache.get_client() is not None
