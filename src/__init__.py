@@ -4,7 +4,6 @@ from flask import Flask
 from dynaconf import FlaskDynaconf
 
 from .routes import create_routes
-from .log import configure_logging
 from .db import initialize_db
 from .cache import initialize_cache
 from .tasks import initialize_tasks
@@ -19,7 +18,6 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    configure_logging(app)
     initialize_db(app)
     initialize_cache(app)
     initialize_tasks(app)
