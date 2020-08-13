@@ -5,9 +5,7 @@ from flask import Flask, request, abort
 from flask_restful import Resource, Api
 from loguru import logger
 
-from .db import get_todo, list_todos
-from . import cache
-from .tasks import add_todo_to_db, delete_todo_from_cache, delete_todo_from_db, get_queue
+from . import cache, db, tasks
 
 
 todo_schema = {
@@ -35,20 +33,20 @@ def validate_todo(json_body):
 class TodoAll(Resource):
 
     def get(self):
-        keys = list_todos()
+        keys = db.list_todos()
         return list(keys)
 
     def post(self):
         body = request.get_json()
         validate_todo(body)
-        get_queue().enqueue(add_todo_to_db, body)
+        tasks.get_queue().enqueue(tasks.add_todo_to_db, body)
         return body['id'], 202
 
 
 class TodoSingle(Resource):
 
     def get(self, todo_id: str):
-        x = cache.get_todo(todo_id, get_todo)
+        x = cache.get_todo(todo_id, db.get_todo)
         if x is None:
             return abort(404)
         return x, 200
@@ -57,12 +55,12 @@ class TodoSingle(Resource):
         body = request.get_json()
         body['id'] = todo_id
         validate_todo(body)
-        get_queue().enqueue(add_todo_to_db, body)
+        tasks.get_queue().enqueue(tasks.add_todo_to_db, body)
         return todo_id, 202
 
     def delete(self, todo_id: str):
-        get_queue().enqueue(delete_todo_from_cache, todo_id)
-        get_queue().enqueue(delete_todo_from_db, todo_id)
+        tasks.get_queue().enqueue(tasks.delete_todo_from_cache, todo_id)
+        tasks.get_queue().enqueue(tasks.delete_todo_from_db, todo_id)
         return todo_id, 202
 
 
